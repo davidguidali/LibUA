@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>nauful</Authors>
+    <Company>LibUA</Company>
+    <Description>Open-source OPC UA client and server library.</Description>
+    <Copyright>Apache License 2.0</Copyright>
+    <PackageProjectUrl>https://github.com/nauful/LibUA</PackageProjectUrl>
+    <PackageTags>opcua;opc</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
