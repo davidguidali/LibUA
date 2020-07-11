@@ -5293,6 +5293,15 @@ namespace LibUA
 			DiscoveryServer = 3,
 		}
 
+		public enum ValueRank
+		{
+			OneOrMoreDimensions = 0,
+			OneDimension = 1,
+			Scalar = -1,
+			Any = -2,
+			ScalarOrOneDimension = -3
+		}
+
 		[Flags]
 		public enum AttributeWriteMask
 		{
@@ -5501,6 +5510,11 @@ namespace LibUA
 			Historizing = 20,
 			Executable = 21,
 			UserExecutable = 22,
+			DataTypeDefinition = 23,
+			RolePermissions = 24,
+			UserRolePermissions = 25,
+			AccessRestrictions = 26,
+			AccessLevelEx = 27,
 		}
 
 		[Flags]
@@ -6646,6 +6660,12 @@ namespace LibUA
 				this.MonitoredItemId = MonitoredItemId;
 				this.Parameters = Parameters;
 			}
+		}
+
+		public class SubscriptionAcknowledgement
+		{
+			public uint SubscriptionId { get; set; }
+			public uint SequenceNumber { get; set; }
 		}
 
 		public class RequestHeader

@@ -53,6 +53,16 @@ namespace LibUA
 				{
 					return NodeId.Equals(other.NodeId) && Attribute == other.Attribute;
 				}
+
+				public static bool operator ==(ServerMonitorKey left, ServerMonitorKey right)
+				{
+					return left.Equals(right);
+				}
+
+				public static bool operator !=(ServerMonitorKey left, ServerMonitorKey right)
+				{
+					return !(left == right);
+				}
 			}
 
 			public struct SessionCreationInfo
@@ -520,6 +530,10 @@ namespace LibUA
 					{
 						res[i] = new DataValue(node.UserWriteMask, StatusCode.Good);
 					}
+					else if (readValueIds[i].AttributeId == NodeAttribute.AccessRestrictions)
+					{
+						res[i] = new DataValue((UInt16)0, StatusCode.Good);
+					}
 					else if (readValueIds[i].AttributeId == NodeAttribute.IsAbstract && node is NodeReferenceType)
 					{
 						res[i] = new DataValue((node as NodeReferenceType).IsAbstract, StatusCode.Good);
@@ -546,13 +560,14 @@ namespace LibUA
 					}
 					else if (readValueIds[i].AttributeId == NodeAttribute.DataType && node is NodeVariable)
 					{
-						res[i] = new DataValue((node as NodeVariable).DataType, StatusCode.Good);
+						res[i] = new DataValue((node as NodeVariable).DataType ?? new NodeId(UAConst.BaseDataType), StatusCode.Good);
 					}
 					else if (readValueIds[i].AttributeId == NodeAttribute.DataType && node is NodeVariableType)
 					{
-						res[i] = new DataValue((node as NodeVariableType).DataType, StatusCode.Good);
+						res[i] = new DataValue((node as NodeVariableType).DataType ?? new NodeId(UAConst.BaseDataType), StatusCode.Good);
 					}
-					else if (readValueIds[i].AttributeId == NodeAttribute.AccessLevel && node is NodeVariable)
+					else if ((readValueIds[i].AttributeId == NodeAttribute.AccessLevel ||
+						readValueIds[i].AttributeId == NodeAttribute.AccessLevelEx) && node is NodeVariable)
 					{
 						res[i] = new DataValue((byte)(node as NodeVariable).AccessLevel, StatusCode.Good);
 					}
@@ -578,11 +593,11 @@ namespace LibUA
 					}
 					else if (readValueIds[i].AttributeId == NodeAttribute.ValueRank && node is NodeVariable)
 					{
-						res[i] = new DataValue((Int32)0, StatusCode.Good);
+						res[i] = new DataValue((Int32)(node as NodeVariable).ValueRank, StatusCode.Good);
 					}
 					else
 					{
-						res[i] = new DataValue(null, StatusCode.BadAttributeIdInvalid);
+						res[i] = new DataValue(null, StatusCode.Good);
 					}
 				}
 
